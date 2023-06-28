@@ -1,0 +1,73 @@
+//1 . Given an array of integers and a target value, you must determine which two integers' sum
+equals the target and return a 2D array. Then merge the array into a single array with sorting (
+ascending ) order, in the next step double the target value and find again the combination of
+digits (can be multiple digits ) that are equal to the double targeted value and returned into a 2D
+array.
+Sample Input : [1, 3, 2, 2, -4, -6, -2, 8];
+Target Value = 4,
+Output: First Combination For “4” : [ [1,3],[2,2],[-4,8],[-6,2] ];
+Merge Into a single Array : [-6,-4,1,2,2,2,3,8];
+Second Combination For “8” : [ [ 1,3,2,2], [8,-4,2,2],....,[n,n,n,n] ]//
+
+
+ import java.util.*;
+class HelloWorld {
+  public static int[][] findTwoSum(int[] nums, int target) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int[][] result = new int[0][0];
+
+        for (int i = 0; i < nums.length; i++) {
+            int complement = target - nums[i];
+            if (map.containsKey(complement)) {
+                result = new int[][]{{nums[i], complement}};
+                break;
+            }
+            map.put(nums[i], i);
+        }
+
+        return result;
+    }
+
+    public static int[][] findDoubleSum(int[] nums, int target) {
+        int doubleTarget = target * 2;
+        List<Integer[]> combinations = new ArrayList<>();
+
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                if (nums[i] + nums[j] == doubleTarget) {
+                    combinations.add(new Integer[]{nums[i], nums[j]});
+                }
+            }
+        }
+
+        int[][] result = new int[combinations.size()][2];
+        for (int i = 0; i < combinations.size(); i++) {
+            result[i] = new int[]{combinations.get(i)[0], combinations.get(i)[1]};
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int[] nums = {2, 4, 6, 8, 10};
+        int target = 10;
+
+        // Find two integers that sum to the target
+        int[][] twoSumResult = findTwoSum(nums, target);
+        System.out.println("Two Sum Result:");
+        for (int[] pair : twoSumResult) {
+            System.out.println(Arrays.toString(pair));
+        }
+
+        // Sort the array in ascending order
+        Arrays.sort(nums);
+        System.out.println("Sorted Array: " + Arrays.toString(nums));
+
+        // Find combinations of digits that sum to the double target value
+        int[][] doubleSumResult = findDoubleSum(nums, target);
+        System.out.println("Double Sum Result:");
+        for (int[] pair : doubleSumResult) {
+            System.out.println(Arrays.toString(pair));
+        }
+    }
+}
